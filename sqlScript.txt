@@ -1,0 +1,78 @@
+DROP DATABASE IF EXISTS Food_Pantry;
+
+CREATE DATABASE Food_Pantry;
+
+USE Food_Pantry;
+
+CREATE TABLE user(
+	email VARCHAR(30),
+	firstName VARCHAR(15) NULL,
+	lastName VARCHAR(15) NULL,
+	password VARCHAR(15) NOT NULL,
+	PRIMARY KEY (email)	
+);
+
+
+CREATE TABLE cuisine(
+	cuisine_ID INTEGER AUTO_INCREMENT,
+	cuisine_name VARCHAR(30),
+	PRIMARY KEY (cuisine_ID)
+);
+
+CREATE TABLE ingredients(
+	ingredient_ID INTEGER AUTO_INCREMENT,
+	ingredient_name VARCHAR(50),
+	PRIMARY KEY (ingredient_ID)
+);
+
+
+CREATE TABLE measurements(
+	measurement_ID INTEGER AUTO_INCREMENT,
+	measurement_name VARCHAR(20),
+	PRIMARY KEY (measurement_ID)
+);
+
+CREATE TABLE meals(
+	meal_ID INTEGER AUTO_INCREMENT,
+	meal_description VARCHAR(100),
+	meal_name VARCHAR(50),
+	PRIMARY KEY (meal_ID)
+);
+
+CREATE TABLE pantry(
+	pantry_ID INTEGER AUTO_INCREMENT,
+	pantry_name VARCHAR(25),
+	PRIMARY KEY (pantry_ID)
+);
+
+CREATE TABLE recipes (
+	recipe_ID INTEGER AUTO_INCREMENT,
+	cuisine_ID INTEGER,
+	recipe_name VARCHAR(25),
+	recipe_description VARCHAR(200),
+	recipe_prepTime TIME,
+	recipe_cookTime TIME,
+	PRIMARY KEY (recipe_ID),
+	FOREIGN KEY (cuisine_ID) REFERENCES cuisine(cuisine_ID)
+);
+
+CREATE TABLE quantity(
+	quantity_ID INTEGER AUTO_INCREMENT,
+	recipe_ID INTEGER,
+	ingredient_ID INTEGER,
+	ingredient_measurement_ID INTEGER,
+	ingredient_quantity FLOAT,
+	PRIMARY KEY (quantity_ID),
+	FOREIGN KEY (recipe_ID) REFERENCES recipes(recipe_ID),
+	FOREIGN KEY (ingredient_ID) REFERENCES ingredients(ingredient_ID),
+	FOREIGN KEY (ingredient_measurement_ID) REFERENCES measurements(measurement_ID)
+);
+
+CREATE TABLE recipe_steps(
+	step_ID INTEGER AUTO_INCREMENT,
+	recipe_ID INTEGER,
+	step_number INTEGER,
+	step_description VARCHAR(200),
+	PRIMARY KEY (step_ID),
+	FOREIGN KEY (recipe_ID) REFERENCES recipes(recipe_ID)
+);
