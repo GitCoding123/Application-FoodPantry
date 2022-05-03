@@ -1,3 +1,11 @@
+<?php 
+    session_start();
+
+	include("connection.php");
+	include("functions.php");
+
+	$user_data = check_login($con);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +27,7 @@
         <div class="menu">
             <ul>
                 <li><a href="findrecipe.html">Find a Recipe</a></li>
-                <li><a href="mealplan.html">Meal Plan</a></li>
+                <!--<li><a href="mealplan.html">Meal Plan</a></li>-->
                 <li><a href="pantry.html">Pantry</a></li>   
            </ul>
         </div>
@@ -29,11 +37,12 @@
         <!--Main Column-->
         <div class="main">
             <h1>Find a Recipe</h1>
+            <hr>
             <div class="recipe">
                 <ul>
-                    <li><a href="ringredient.html">By Ingredient</a></li>
+                    <li><a href="ringredient.html">By Ingredients</a></li>
                     <li><a href="rmacros.html">By Macros</a></li>
-                    <li><a href="rkeyword.html">By Keyword</a></li>
+                    <li><a href="rkeyword.html">By Keywords</a></li>
                     <!--Need logic for this, will redirect to generic recipe view and load a random recipe-->
                     <li><a href="recipe.html">Random Recipe</a> </li> 
                 </ul>
@@ -46,27 +55,12 @@
         </div>
         <div class="list">
             <ul>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
+                <li>Parsley</li>
+                <li>Brown Mushrooms</li>
+                <li>Garlic</li>
+                <li>Pork Chops</li>
+                <li>Heavy Cream</li>
+                <li>Thyme</li>
             </ul>
         </div>
     </div>
