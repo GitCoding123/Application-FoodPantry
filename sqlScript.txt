@@ -12,7 +12,6 @@ CREATE TABLE user(
 	PRIMARY KEY (email)	
 );
 
-
 CREATE TABLE cuisine(
 	cuisine_ID INTEGER AUTO_INCREMENT,
 	cuisine_name VARCHAR(30),
@@ -32,17 +31,13 @@ CREATE TABLE measurements(
 	PRIMARY KEY (measurement_ID)
 );
 
-CREATE TABLE meals(
-	meal_ID INTEGER AUTO_INCREMENT,
-	meal_description VARCHAR(100),
-	meal_name VARCHAR(50),
-	PRIMARY KEY (meal_ID)
-);
-
 CREATE TABLE pantry(
 	pantry_ID INTEGER AUTO_INCREMENT,
-	pantry_name VARCHAR(25),
-	PRIMARY KEY (pantry_ID)
+      pantry_user VARCHAR(30),
+      ingredient_ID INT,
+	PRIMARY KEY (pantry_ID),
+      FOREIGN KEY (pantry_user) REFERENCES user(email),
+      FOREIGN KEY (ingredient_ID) REFERENCES ingredients(ingredient_ID)
 );
 
 CREATE TABLE recipes (
@@ -50,6 +45,8 @@ CREATE TABLE recipes (
 	cuisine_ID INTEGER,
 	recipe_name VARCHAR(25),
 	recipe_description VARCHAR(200),
+	recipe_restriction VARCHAR(12),
+	recipe_calories INTEGER,
 	recipe_prepTime TIME,
 	recipe_cookTime TIME,
 	PRIMARY KEY (recipe_ID),
@@ -61,7 +58,7 @@ CREATE TABLE quantity(
 	recipe_ID INTEGER,
 	ingredient_ID INTEGER,
 	ingredient_measurement_ID INTEGER,
-	ingredient_quantity FLOAT,
+	ingredient_quantity VARCHAR(10),                                          #*****************ALTER TABLE quantity MODIFY ingredient_quantity VARCHAR(10);****************
 	PRIMARY KEY (quantity_ID),
 	FOREIGN KEY (recipe_ID) REFERENCES recipes(recipe_ID),
 	FOREIGN KEY (ingredient_ID) REFERENCES ingredients(ingredient_ID),
@@ -72,7 +69,439 @@ CREATE TABLE recipe_steps(
 	step_ID INTEGER AUTO_INCREMENT,
 	recipe_ID INTEGER,
 	step_number INTEGER,
-	step_description VARCHAR(200),
+	step_description VARCHAR(1000),                                            #****************ALTER TABLE recipe_steps MODIFY step_description VARCHAR(1000);****************
 	PRIMARY KEY (step_ID),
 	FOREIGN KEY (recipe_ID) REFERENCES recipes(recipe_ID)
 );
+
+CREATE TABLE bookmarks(
+	bookmark_ID INTEGER AUTO_INCREMENT,
+      email VARCHAR(30),
+      recipe_ID INTEGER,
+      PRIMARY KEY (bookmark_ID),
+      FOREIGN KEY (email) REFERENCES user(email),
+      FOREIGN KEY (recipe_ID) REFERENCES recipes(recipe_ID)
+);
+
+CREATE PROCEDURE addUser
+    	@email VARCHAR(20), 
+    	@password VARCHAR(15), 
+    	@firstName VARCHAR(15) = NULL, 
+    	@lastName VARCHAR(15) = NULL,
+
+    	@responseMessage NVARCHAR(250) OUTPUT
+AS
+BEGIN
+    	SET NOCOUNT ON
+
+    	BEGIN TRY
+
+        	INSERT INTO Food_Pantry.user (email, password, firstName, lastName)
+        	VALUES(@email, HASHBYTES('SHA2_512', @password), @firstName, @lastName)
+
+        	SET @responseMessage='Success'
+
+    	END TRY
+    	BEGIN CATCH
+        	SET @responseMessage=ERROR_MESSAGE()
+    	END CATCH
+END
+
+# All procedures are below
+delimiter //
+# Called in the format of:
+# CALL bookmark_add('username@gmail.com', 23); -- If an output is needed it will be like @outattrname instead of a value.
+
+
+
+#Add an item to the pantry
+CREATE PROCEDURE pantry_add (IN inEmail varchar(30), IN inIngredient INT)
+BEGIN
+	INSERT INTO pantry
+    VALUES(NULL, inEmail, inIngredient);
+END//
+
+#Remove an item from the pantry
+CREATE PROCEDURE pantry_remove (IN inEmail varchar(30), IN inIngredient INT)
+BEGIN
+	DELETE FROM pantry
+    WHERE pantry_user = inEmail AND ingredient_ID = inIngredient;
+END//
+
+#Display all items in a user's pantry
+CREATE PROCEDURE pantry_display (IN inEmail varchar(30))
+BEGIN
+	SELECT *
+    FROM pantry
+    WHERE pantry_user = inEmail;
+END//
+
+# Create a bookmark for a user
+CREATE PROCEDURE bookmark_add (IN inEmail varchar(30), IN inRecipe int)
+BEGIN
+	INSERT INTO bookmarks
+	VALUES (inEmail, inRecipe);
+END//
+
+# Remove a bookmark for a user
+CREATE PROCEDURE bookmark_remove (IN inEmail varchar(30), IN inRecipe int)
+BEGIN
+	DELETE FROM bookmarks
+	WHERE email = inEmail AND recipe_ID = inRecipe;
+END//
+
+# Displays all ingredients for a given recipe
+CREATE PROCEDURE recipe_ingredients (IN inRecipe int)
+BEGIN
+	SELECT A.ingredient_quantity, B.measurement_name, C.ingredient_name
+	FROM quantity AS A 
+	LEFT JOIN measurements AS B
+	ON A.ingredient_measurement_ID = B.measurement_ID
+	LEFT JOIN ingredients AS C
+	ON A.ingredient_ID = C.ingredient_ID
+	WHERE A.recipe_ID = inRecipe
+	ORDER BY ingredient_name;
+END//
+
+# Displays all steps for a given recipe
+CREATE PROCEDURE recipe_steps (IN inRecipe int)
+BEGIN
+	SELECT step_number, step_description
+	FROM recipe_steps
+	WHERE recipe_ID = inRecipe
+    ORDER BY step_number; 
+END//
+
+# Display all recipes ordered only by cuisine type and name (default)
+CREATE PROCEDURE display_recipes_default ()
+BEGIN
+	SELECT *
+    FROM recipes
+    ORDER BY cuisine_ID, recipe_name;
+END//
+
+# Display all recipes ordered by prep time
+CREATE PROCEDURE display_recipes_prep ()
+BEGIN
+	SELECT *
+    FROM recipes
+    ORDER BY recipe_prepTime, cuisine_ID, recipe_name;
+END//
+
+# Display all recipes ordered by cook time
+CREATE PROCEDURE display_recipes_cook ()
+BEGIN
+	SELECT *
+    FROM recipes
+    ORDER BY recipe_cookTime, cuisine_ID, recipe_name;
+END//
+
+# Display all recipes ordered by calories
+CREATE PROCEDURE display_recipes_calorie ()
+BEGIN
+	SELECT *
+    FROM recipes
+    ORDER BY recipe_calories, cuisine_ID, recipe_name;
+END//
+
+#Display all recipes by a dietary restriction
+CREATE PROCEDURE display_recipes_restriction (IN inRestriction varchar(12))
+BEGIN
+	SELECT *
+    FROM recipes
+    WHERE recipe_restriction = inRestriction
+    ORDER BY cuisine_ID, recipe_name;
+END//
+
+#Display all recipes bookmarked by a user
+CREATE PROCEDURE display_recipes_bookmark (IN inEmail varchar(30))
+BEGIN
+	SELECT A.recipe_ID, B.recipe_name, B.recipe_description, B.recipe_prepTime, B.recipe_cookTime
+    FROM bookmarks as A
+    LEFT JOIN recipes as B
+    ON A.recipe_ID = B.recipe_ID
+    WHERE A.email = inEmail
+    ORDER BY recipe_name;
+END//
+
+# Test a login, will return the email used to login if the username and password match. Otherwise failed.
+CREATE PROCEDURE loginUser (IN inEmail varchar(20), IN inPassword varchar(15))
+BEGIN
+	SELECT email 
+    FROM user 
+    WHERE email = inEmail AND password = HASHBYTES('SHA2_512', inPassword);
+END//
+
+delimiter ;
+
+INSERT INTO 
+cuisine (cuisine_name)
+VALUES 
+('Vegan'),
+('Vegetarian'),
+('Pescetarian'),
+('Low-Fat'),
+('Low-Cal'),
+('American'),
+('French'),
+('Japanese'),
+('Chinese'),
+('Jamaican'),
+('Indian'),
+('Greek'),
+('Spanish'),
+('Mediterranean'),
+('Moroccan'),
+('Italian'),
+('Moroccan'),
+('Turkish'),
+('Thai'),
+('Hawaiian'),
+('Mexican');
+
+
+INSERT INTO
+        Ingredients (ingredient_name)
+VALUES
+('All Purpose Flour'),
+('All Purpose Seasoning'),
+('Apple Cider Vinegar'),
+('Bay Leaf'),
+('Beef Chuck Roast'),
+('Beef Stock'),
+('Black Pepper'),
+('Brown Sugar'),
+('Browning Sauce'),
+('Butternut Squash'),
+('Canned Chickpeas'),
+('Canned Lentils'),
+('Canned Tomatoes'),
+('Cayenne Pepper'),
+('Chicken Broth'),
+('Chicken Thigh'),
+('Chipotle Peppers'),
+('Coriander'),
+('Crushed Red Pepper Flake'),
+('Garlic'),
+('Garlic Powder'),
+('Ginger'),
+('Greek Yogurt'),
+('Green Onion'),
+('Ground Cloves'),
+('Ground Cumin'),
+('Ketchup'),
+('Lamb'),
+('Lemon-Pepper Seasoning'),
+('Lime Juice'),
+('Mint Leaves'),
+('Olive Oil'),
+('Onion'),
+('Oregano'),
+('Oxtails'),
+('Panko Bread Crumbs'),
+('Paprika'),
+('Parsley'),
+('Pineapple'),
+('Pineapple Juice'),
+('Red Onion'),
+('Red Wine'),
+('Russet Potato'),
+('Salt'),
+('Soy Sauce'),
+('Squash'),
+('Sriracha'),
+('Sugar'),
+('Sweet Paprika'),
+('Tomato Paste'),
+('Worcestershire Sauce'),
+('Zucchini'),
+('Canola Oil'),
+('Ground Lamb'),
+('Plum Tomatoes'),
+('Red Onion'),
+('Lemon'),
+('Vegetable Oil'),
+('Butter'),
+('Carrot'),
+('Red Potato'),
+('Thyme'),
+('Rosemary'),
+('Habanero Pepper'),
+('Tomato'),
+('Lemon Juice'),
+('Herbes de Provence'),
+('Gruyere Cheese'),
+('Ghee'),
+('Water'),
+('Jasmine Rice'),
+('Cilantro');
+
+
+
+
+INSERT INTO 
+        measurements(measurement_name)
+VALUES
+('10oz can'),
+('10oz cans'),
+('14oz can'),
+('14oz cans'),
+('28oz can'),
+('28oz cans'),
+('clove'),
+('cloves'),
+('cup'),
+('cups'),
+('large'),
+('pound'),
+('pounds'),
+('small'),
+('tablespoon'),
+('tablespoons'),
+('teaspoon'),
+('teaspoons'),
+('to taste'),
+('medium'),
+('sprig'),
+('sprigs');
+
+
+
+
+INSERT INTO 
+recipes (cuisine_ID, recipe_name, recipe_description, recipe_calories,  recipe_prepTime, recipe_cookTime)
+VALUES
+('19','Huli Huli Chicken','Sweet and sticky grilled chicken recipe direct from the Hawaiian Islands','391','08:00:00','00:30:00'),
+('10','Jamaican Oxtail','A Jamaican staple, hearty stewed oxtails','460','12:00:00','04:00:00'),
+('14','Kofta Meatballs','Fresh take on a mediterranean classic, quick kofta meatballs fulls of spices and herbs','339','00:10:00','00:10:00'),
+('7','Vegetable Tian','Colorful, hearty, and delicious provincial French dish','287','01:00:00','01:15:00'),
+('20','Harira','Moroccan lamb, tomato, and lentil soup that is perfect for a cool evening','414','00:20:00','02:25:00'),
+('21','Barbacoa','This slow cooked mexican classic is sure to be a hit','513','00:45:00','07:00:00');
+
+
+INSERT INTO
+        quantity(recipe_ID, ingredient_ID, ingredient_measurement_ID, ingredient_quantity)
+VALUES
+(1,16,13,'3'),
+(1,44,19,''),
+(1,7,19,''),
+(1,40,9,'1'),
+(1,45,9,'1/4'),
+(1,8,9,'1/4'),
+(1,27,9,'1/4'),
+(1,15,9,'1/4'),
+(1,47,15,'1'),
+(1,20,8,'3'),
+(1,22,18,'2'),
+(1,39,null,'1'),
+(1,24,null,'2'),
+(2,35,13,'2.5'), 
+(2,51,15,'1'), 
+(2,45,15,'1'), 
+(2,44,17,'2'), 
+(2,21,17,'1'), 
+(2,2,17,'2'), 
+(2,9,17,'1'), 
+(2,37,17,'1/4'), 
+(2,7,17,'1/4'), 
+(2,14,17,'1/4'),
+(2,58,16,'2'), 
+(2,59,15,'1'), 
+(2,60,20,'2'), 
+(2,61,20,'2'), 
+(2,33,14,'1'),
+(2,20,8,'4'), 
+(2,6,10,'3'), 
+(2,62,22,'6'), 
+(2,63,21,'1'), 
+(2,64,null,'1'),
+(3,33,14,'1'),
+(3,38,9,'1/2'),
+(3,31,9,'1/4'),
+(3,34,15,'1'),
+(3,20,8,'2'),
+(3,29,17,'1'),
+(3,44,17,'1/2'),
+(3,37,17,'1/2'),
+(3,26,17,'1/4'),
+(3,28,12,'1'),
+(3,53,15,'1'),
+(3,23,9,'1'),
+(3,55,null,'2'),
+(3,56,16,'3'),
+(3,57,null,'2'),
+(4,32,16,'2'),
+(4,36,9,'1'),
+(4,56,10,'2'),
+(4,20,8,'3'),
+(4,19,17,'1/2'),
+(4,42,16,'2'),
+(4,10,14,'1/2'),
+(4,43,11,'2'),
+(4,52,11,'1'),
+(4,65,11,'2'),
+(4,66,16,'2'),
+(4,67,18,'3/2'),
+(4,44,17,'1'),
+(4,7,17,'1'),
+(4,68,9,'1'),
+(4,36,9,'1/2'),
+(4,69,16,'2'),
+        (5,32,16,'2'),
+(5,28,13,'1.5'),
+(5,33,null,'1'),
+(5,20,8,'2'),
+(5,50,16,'2'),
+(5,26,18,'3/2'),
+(5,49,18,'2'),
+(5,25,17,'1/2'),
+(5,4,null,'1'),
+(5,6,10,'4'),
+(5,13,4,'2'),
+(5,18,22,'6'),
+(5,11,4,'2'),
+(5,12,4,'2'),
+(5,23,19,''),
+(6,30,9,'1/4'),
+(6,3,9,'1/4'),
+(6,17,null,'3'),
+(6,20,8,'4'),
+(6,26,18,'4'),
+(6,34,18,'3'),
+(6,7,18,'3/2'),
+(6,44,17,'3/4'),
+(6,25,17,'1/2'),
+(6,15,9,'1'),
+(6,5,13,'3-4'),
+(6,4,null,'3'),
+(6,70,10,'3'),
+(6,71,10,'2'),
+(6,59,16,'3'),
+(6,44,18,'3/2'),
+(6,72,9,'1/2'),
+(6,30,16,'2');
+
+
+INSERT INTO
+        recipe_steps(recipe_ID, step_number, step_description)
+VALUES
+(1,1,'Season chicken all over with salt and pepper and place in a large bowl. In a medium bowl, whisk to combine pineapple juice, soy sauce, brown sugar, ketchup, chicken broth, Sriracha, garlic, and ginger.'),                
+(1,2,'Pour marinade over chicken and cover with plastic wrap. Marinate in the refrigerator for at least 1 hour, or up to 6 hours.'),                        
+(1,3,'Heat grill or grill pan over medium heat. Add pineapple and cook, turning occasionally, until charred on all sides, 10 to 15 minutes.'),                
+(1,4,'Meanwhile, remove chicken from marinade, then bring marinade to a boil in a medium sauce pan over high heat. Boil until it is the consistency of a thin barbecue sauce, about 9 minutes.'),                        (1,5,'When pineapple is done cooking, remove from grill and add chicken thighs, skin side down. Cook, turning occasionally and basting with sauce, until skin is crisp and chicken is cooked through, about 20 minutes in total.'),                
+(1,6,'Serve pineapple and grilled chicken together, garnished with green onions.'),                        
+(2,1,'In a small bowl bowl, combine the first 9 ingredients. Add oxtails to a shallow dish; rub mixture over oxtails. Cover and refrigerate overnight.'),                
+(2,2,'In a Dutch oven, heat oil and butter over medium heat. In batches, brown oxtails on all sides; set oxtails aside. In the same pan, add onions, carrots and pepper; cook and stir until tender, 4-5 minutes. Add garlic; cook 1 minute longer.'),                        
+(2,3,'Add beef broth to pan, stirring to loosen browned bits. Bring to a boil. Add oxtails, potatoes, thyme and rosemary. Reduce heat; cover and simmer until oxtail meat is tender and starting to fall away from bones, 2-1/2-3 hours. Remove and discard herbs. Remove oxtails; keep warm. Simmer, uncovered, until mixture reaches desired thickness, 5-10 minutes. Return oxtails to pan. If desired, garnish with parsley.'),                        
+(3,1,'Place onion, parsley, mint, oregano and garlic in bowl of food processor. Pulse until minced. In a large bowl, combine herb mixture, lemon pepper, salt, paprika and cumin. Add lamb; mix lightly but thoroughly. With wet hands, shape into 16 balls.'),                        
+(3,2,'In a large skillet, heat oil over medium heat. Brown meatballs in batches; drain. Remove and keep warm. Serve meatballs over cooked couscous. Top with yogurt, tomato wedges and red onion. Garnish with mint leaves and lemon wedges.'),                        
+(4,1,'Preheat oven to 400º. Lightly grease a 10-in. cast iron skillet; sprinkle with 1 cup panko breadcrumbs. In another skillet, cook onions in olive oil over medium heat until tender, 4-5 minutes. Add garlic and red pepper flakes; cook 1 minute. Stir in red wine; cook until mixture is almost dry, 1-2 minutes. Spread onion mixture in the bottom of the prepared cast iron pan; set aside.'),                        
+(4,2,'With a mandoline or sharp knife, cut the squash, potatoes, zucchini and tomatoes into ¼-inch-thick slices. On a flat surface, layer vegetables into stacks, starting with a potato slice, tomato, squash and zucchini. Arrange stacks on their sides around outside edge of prepared skillet in a circular pattern. Make a second, alternating circle in the center. Drizzle lemon juice over vegetables and sprinkle with herbes de Provence, salt and pepper. Cover with foil; bake until vegetables are almost tender, 1 hour. Meanwhile, in a small bowl, combine cheese, ½ cup panko and clarified butter.'),                        
+(4,3,'Remove foil; sprinkle with topping. Bake until cheese is melted and starting to brown, about 15 minutes. Remove and let stand at least 10 minutes before serving.'),                        
+(5,1,'Heat the oil in a large saucepan over medium-high heat. Season the lamb, then in batches, cook, turning, for 4-5 minutes until browned. Remove from the pan and set aside.'),                        
+(5,2,'Add the onion and garlic to the pan and cook, stirring, for 3-4 minutes until softened. Return the lamb to the pan with the tomato paste, spices and bay leaf. Cook, stirring, for 1 minute, then add the stock, chopped tomato and coriander. Bring to a simmer, then cover and reduce heat to low. Cook for 1 hour, then stir in chickpeas and lentils. Cover and cook for 30 minutes, then remove the lid and cook for a further 30 minutes or until the lamb is tender and the soup is slightly reduced and thickened.'),
+(5,3,'Garnish with extra coriander and serve with yoghurt and pita bread.'),
+(6,1,'Place the first 9 ingredients in a blender; cover and process until smooth. Add broth; pulse to combine.'),
+(6,2,'Place roast and bay leaves in a 4- or 5-qt. slow cooker; pour sauce over top. Cook, covered, on low until meat is tender, 7-9 hours.'),
+(6,3,'Prepare rice about 30 minutes before serving. In a large saucepan, combine water, rice, butter and salt; bring to a boil. Reduce heat; simmer, covered, until liquid is absorbed and rice is tender, 12-15 minutes. Remove from heat; gently stir in cilantro and lime juice.'),        
+(6,4,'Remove roast from slow cooker; cool slightly. Discard bay leaves and skim fat from cooking juices. Shred beef with 2 forks; return to slow cooker. Serve with rice and, if desired, radishes, cilantro and limes.');

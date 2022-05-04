@@ -1,0 +1,74 @@
+<?php 
+    session_start();
+
+	include("connection.php");
+	include("functions.php");
+
+	$user_data = check_login($con);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's 4 Dinner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,500;1,200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!--Left Column-->
+        <div class="logo">
+            <a href="home.html">What's <span>4</span> Dinner</a>
+        </div>
+        <div class="menu">
+            <ul>
+               <li><a href="findrecipe.html">Find a Recipe</a></li>
+               <li><a href="pantry.html">Pantry</a></li>   
+           </ul>
+        </div>
+        <div class="account">   
+            <a href="account.html">Account</a><br>
+            <a href="logout.php">Logout</a>     
+        </div>
+        <!--Main Column-->
+        <div class="main">
+            <h1>Find Recipe: <span>By Keyword</span></h1>
+            
+        </div>
+        <!--Right Column-->
+        <div class="listheader">
+            <a href="">Shopping List</a>
+            <hr>
+        </div>
+        <div class="list">
+            <ul>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
