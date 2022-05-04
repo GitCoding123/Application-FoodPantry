@@ -2,8 +2,8 @@
 
 session_start();
 
-	include("connection.php");
-	include("functions.php");
+include("connection.php");
+include("functions.php");
 
 
 	if($_SERVER['REQUEST_METHOD'] == "POST")
@@ -55,46 +55,96 @@ session_start();
 
 	<style type="text/css">
 	
-	#text{
+	* {box-sizing: border-box}
 
-		height: 25px;
-		border-radius: 5px;
-		padding: 4px;
-		border: solid thin #aaa;
-		width: 100%;
+	/* Full-width input fields */
+  	input[type=text], input[type=password] {
+ 	width: 100%;
+  	padding: 15px;
+  	margin: 5px 0 22px 0;
+  	display: inline-block;
+  	border: none;
+  	background: #f1f1f1;
 	}
 
-	#button{
-
-		padding: 10px;
-		width: 100px;
-		color: white;
-		background-color: lightblue;
-		border: none;
+	input[type=text]:focus, input[type=password]:focus {
+  	background-color: #ddd;
+  	outline: none;
 	}
 
-	#box{
+	hr {
+  	border: 1px solid #f1f1f1;
+  	margin-bottom: 25px;
+	}
 
-		background-color: grey;
-		margin: auto;
-		width: 300px;
-		padding: 20px;
+	/* Set a style for all buttons */
+	button {
+  	background-color: #04AA6D;
+  	color: white;
+  	padding: 14px 20px;
+  	margin: 8px 0;
+  	border: none;
+  	cursor: pointer;
+  	width: 100%;
+  	opacity: 0.9;
+	}
+
+	button:hover {
+  		opacity:1;
+	}
+
+	/* Extra styles for the cancel button */
+	.cancelbtn {
+  		padding: 14px 20px;
+  		background-color: #f44336;
+	}
+
+	/* Float cancel and signup buttons and add an equal width */
+	.cancelbtn, .Login {
+  	float: left;
+  	width: 50%;
+	}
+
+	/* Add padding to container elements */
+	.container {
+  	padding: 24px;
+	}
+
+	/* Clear floats */
+	.clearfix::after {
+  	content: "";
+  	clear: both;
+  	display: table;
+	}
+
+	/* Change styles for cancel button and signup button on extra small screens */
+	@media screen and (max-width: 300px) {
+  	.cancelbtn, .signupbtn {
+    width: 75%;
+  	}
 	}
 
 	</style>
 
-	<div id="box">
-		
-		<form method="post">
-			<div style="font-size: 20px;margin: 10px;color: white;">Login</div>
+	<form method="post" style="border:1px solid #ccc">
+  		<div class="container">
+    		<h1>Log In</h1>
+    		<p>Please enter your account info account.</p>
+    		<hr>
 
-			<input id="text" type="text" name="user_name"><br><br>
-			<input id="text" type="password" name="password"><br><br>
+    		<label for="email"><b>Email</b></label>
+    		<input type="text" placeholder="Enter Email" name="user_name" required>
 
-			<input id="button" type="submit" value="Login"><br><br>
+    		<label for="psw"><b>Password</b></label>
+    		<input type="password" placeholder="Enter Password" name="password" required>
 
-			<a href="signup.php">Click to Signup</a><br><br>
-		</form>
-	</div>
+			<p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+
+    		<div class="clearfix">
+      			<button type="button" class="cancelbtn">Cancel</button>
+      			<button type="submit" class="Login">Log in</button>
+    		</div>
+  		</div>
+	</form>
 </body>
 </html>
