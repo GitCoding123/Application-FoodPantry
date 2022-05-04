@@ -21,29 +21,7 @@
 </head>
 <body>
 
-	<!-- Three-line menu button -->
-	<div onclick="openNav()" id="menu-btn">&#9776;</div> 
-	
-	<!-- Shopping List Arrow Button -->
-	<div onclick="openShopList()" id="shop-btn">&#129044;</div>
-
-    <!--Left Column-->
-    <nav id="nav">
-		
-		<div id="logo">
-			<a href="index.php">What's 4 Dinner</a>
-		</div>
-		<div id="menu">
-			<ul>
-			   <li><a href="">Find a Recipe</a></li>
-			   <li><a href="">Pantry</a></li>   
-		   </ul>
-		</div>
-		<div id="account">
-			<a href="">Account</a> 
-			<a href="logout.php">Logout</a>
-		</div>
-	</nav>
+	<?php include 'nav.php'; ?>
 
     <div id="container">
 
@@ -68,22 +46,9 @@
                 </div>
             </div>
         </div>
-        <!--Right Column-->
-        <div id="right-column">
-			<div id="listheader">
-				<a href="">Shopping List</a>
-			</div>
-			<div id="list">
-				<ul>
-					<li>Parsley</li>
-					<li>Brown Mushrooms</li>
-					<li>Garlic</li>
-					<li>Pork Chops</li>
-					<li>Heavy Cream</li>
-					<li>Thyme</li>
-				</ul>
-			</div>
-		</div>
     </div><!--end container-->
+	
+	<?php include 'shoppinglist.php'; ?>
+	
 </body>
 </html>

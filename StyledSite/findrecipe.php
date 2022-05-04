@@ -16,27 +16,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,500;1,200&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/style.css">
+	<script type = "text/javascript" src="scripts/menu.js"></script>  <!-- Link to the JavaScript file -->
 </head>
 <body>
-    <div class="container">
-        <!--Left Column-->
-        <div class="logo">
-            <a href="home.html">What's <span>4</span> Dinner</a>
-        </div>
-        <div class="menu">
-            <ul>
-                <li><a href="findrecipe.html">Find a Recipe</a></li>
-                <!--<li><a href="mealplan.html">Meal Plan</a></li>-->
-                <li><a href="pantry.html">Pantry</a></li>   
-           </ul>
-        </div>
-        <div class="account">   
-            <a href="account.html">Account</a><br>
-            <a href="logout.php">Logout</a>  
-        </div>
+    
+		<?php include 'nav.php'; ?>
+		
+		<div id="container">
+		
         <!--Main Column-->
-        <div class="main">
+        <div id="main">
             <h1>Find a Recipe</h1>
             <hr>
             <div class="recipe">
@@ -45,25 +35,15 @@
                     <li><a href="rmacros.html">By Macros</a></li>
                     <li><a href="rkeyword.html">By Keywords</a></li>
                     <!--Need logic for this, will redirect to generic recipe view and load a random recipe-->
-                    <li><a href="recipe.html">Random Recipe</a> </li> 
+                    <li><a href="recipe.php">Random Recipe</a> </li> 
                 </ul>
             </div>
         </div>
-        <!--Right Column-->
-        <div class="listheader">
-            <a href="">Shopping List</a>
-            <hr>
-        </div>
-        <div class="list">
-            <ul>
-                <li>Parsley</li>
-                <li>Brown Mushrooms</li>
-                <li>Garlic</li>
-                <li>Pork Chops</li>
-                <li>Heavy Cream</li>
-                <li>Thyme</li>
-            </ul>
-        </div>
+		
+		</div><!--End Container-->
+        
+		<?php include 'shoppinglist.php'; ?>
+		
     </div>
 </body>
 </html>

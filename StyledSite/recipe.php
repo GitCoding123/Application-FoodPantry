@@ -17,31 +17,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,500;1,200&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/style.css">
+	<script type = "text/javascript" src="scripts/menu.js"></script>  <!-- Link to the JavaScript file -->
 </head>
 <body>
-    <div class="container">
-        <!--Left Column-->
-        <div class="logo">
-            <a href="home.html">What's <span>4</span> Dinner</a>
-        </div>
-        <div class="menu">
-            <ul>
-               <li><a href="findrecipe.html">Find a Recipe</a></li>
-               <!--<li><a href="mealplan.html">Meal Plan</a></li>-->
-               <li><a href="pantry.html">Pantry</a></li>   
-           </ul>
-        </div>
-        <div class="account">   
-            <a href="account.html">Account</a><br>
-            <a href="logout.php">Logout</a>    
-        </div>
+
+	<?php include 'nav.php' ?>
+	
+    <div id="container">
+        
         <!--Main Column-->
-        <div class="main">
+        <div id="main">
+			
+			<div class="recipeHeader">
             <!--need logic to load name with recipe-->
-            <h1>Recipe: <span>Huli-Huli Chicken</span></h1>
-            <hr>
-            <img src="images/hulihulichicken.png" alt="Picture of huli-Huli Chicken">
+            <h1 class="recipeTitle" >Recipe: Huli-Huli Chicken</h1>
+            <img src="images/hulihulichicken.png" alt="Picture of huli-Huli Chicken" class="midimg">
+			</div>
+			
             <!--need logic to load ingredients, concat quantity and ingredient-->
             <div class="ingredients">
                 <h3>Ingredients:</h3>
@@ -74,21 +67,9 @@
                 </ol>
             </div>
         </div>
-        <!--Right Column-->
-        <div class="listheader">
-            <a href="">Shopping List</a>
-            <hr>
-        </div>
-        <div class="list">
-            <ul>
-                <li>Parsley</li>
-                <li>Brown Mushrooms</li>
-                <li>Garlic</li>
-                <li>Pork Chops</li>
-                <li>Heavy Cream</li>
-                <li>Thyme</li>
-            </ul>
-        </div>
-    </div>
+        
+		<?php include 'shoppinglist.php' ?>
+		
+    </div><!--End Container-->
 </body>
 </html>
