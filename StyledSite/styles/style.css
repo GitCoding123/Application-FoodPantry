@@ -14,6 +14,7 @@ body {
 
 a {
 	text-decoration: none;
+	color: black;
 }
 
 .login {
@@ -208,6 +209,44 @@ nav {
 	height: auto;
 	max-width: 70%;
 }
+
+/* FindRecipe Styling */
+#findoptions {
+	list-style-type: none;
+}
+
+.option {
+	transition: 0.3s;
+}
+
+.option:hover {
+	color: var(--green);
+}
+
+
+/* End FindRecipe Styling */
+
+
+/* Rkeyword Styling */
+
+.search {
+	background-color: white;
+	padding: 0 2em 0 2em;
+	margin-top: 1em;
+	border-radius: 2em;
+	border: double 5px var(--border);
+	transition: 0.3s;
+}
+
+.search:hover {
+	background-color: var(--green);
+	color: white;
+	cursor: pointer;
+}
+
+/* End Rkeyword Styling */
+
+
 
 /* Start Pantry Styling
 

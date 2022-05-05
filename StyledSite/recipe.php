@@ -25,51 +25,63 @@
 	<?php include 'nav.php' ?>
 	
     <div id="container">
-        
         <!--Main Column-->
         <div id="main">
-			
-			<div class="recipeHeader">
-            <!--need logic to load name with recipe-->
-            <h1 class="recipeTitle" >Recipe: Huli-Huli Chicken</h1>
-            <img src="images/hulihulichicken.png" alt="Picture of huli-Huli Chicken" class="midimg">
-			</div>
-			
-            <!--need logic to load ingredients, concat quantity and ingredient-->
+            
+            <?php
+                $recipe = $_GET['recipe'];
+				
+                $sql = "SELECT * FROM recipes WHERE recipe_ID = '$recipe';";
+                $result = mysqli_query($con,$sql);
+
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $id = $row['recipe_ID'];
+					echo '<div class="recipeHeader">';
+                    echo '<h1 class="recipeTitle">'.$row['recipe_name'].'</h1>';
+                }
+            ?>
+            <?php
+                $sql = "SELECT * FROM recipes WHERE recipe_ID = '$recipe';";
+                $result = mysqli_query($con,$sql);
+
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo '<img class="midimg" src="images/'.$row['recipe_image'].'" alt="Picture of huli-Huli Chicken">';
+					echo '</div>';
+                }
+            ?>
+            <br>
             <div class="ingredients">
-                <h3>Ingredients:</h3>
-                <ul>
-                    <li>3 lb. bone-in skin-on chicken thighs (about 6 thighs)</li>
-                    <li>Kosher salt</li>
-                    <li>Freshly ground black pepper</li>
-                    <li>1 c. pineapple juice</li>
-                    <li>1/4 c. low-sodium soy sauce </li>
-                    <li>1/4 c. packed brown sugar</li>
-                    <li>1/4 c. ketchup</li>
-                    <li>1/4 c. low-sodium chicken broth</li>
-                    <li>1 tbsp. Sriracha</li>
-                    <li>3 cloves garlic, minced</li>
-                    <li>2 tsp. freshly grated ginger</li>
-                    <li>1 pineapple, cut into wedges</li>
-                    <li>2 green onions, thinly sliced</li>
+                <ul>    
+                    <?php
+                        $sql = "SELECT * FROM ingredient_list WHERE recipe = '$recipe';";
+                        $result = mysqli_query($con,$sql);
+						echo '<div class="recipeContent">';
+						echo '<h3>Ingredients:</h3>';
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo '<li>'.$row['quantity'].' '.$row['measurement'].' '.$row['ingredient'].'</li>';
+                        }
+						echo '</div>';
+                    ?>
                 </ul>
             </div>
-            <!--need logic to load steps-->
             <div class="steps">
-                <h3>Steps:</h3>
                 <ol type="1">
-                    <li>Season chicken all over with salt and pepper and place in a large bowl. In a medium bowl, whisk to combine pineapple juice, soy sauce, brown sugar, ketchup, chicken broth, Sriracha, garlic, and ginger.</li>
-                    <li>Pour marinade over chicken and cover with plastic wrap. Marinate in the refrigerator for at least 1 hour, or up to 6 hours.</li>
-                    <li>Heat grill or grill pan over medium heat. Add pineapple and cook, turning occasionally, until charred on all sides, 10 to 15 minutes.</li>
-                    <li>Meanwhile, remove chicken from marinade, then bring marinade to a boil in a medium sauce pan over high heat. Boil until it is the consistency of a thin barbecue sauce, about 9 minutes.</li>
-                    <li>When pineapple is done cooking, remove from grill and add chicken thighs, skin side down. Cook, turning occasionally and basting with sauce, until skin is crisp and chicken is cooked through, about 20 minutes in total.</li>
-                    <li>Serve pineapple and grilled chicken together, garnished with green onions.</li>
+                    <?php
+                        $sql = "SELECT * FROM recipe_steps WHERE recipe_ID = '$recipe';";
+                        $result = mysqli_query($con,$sql);
+						echo '<div class="recipeContent">';
+						echo '<h3>Steps:</h3>';
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo '<li>'.$row['step_description'].'</li>';
+                        }
+						echo '</div>';
+                    ?>
                 </ol>
             </div>
-        </div>
-        
-		<?php include 'shoppinglist.php' ?>
-		
+
+        </div><!--end main-->
     </div><!--End Container-->
+	
+	<?php include 'shoppinglist.php' ?>
 </body>
 </html>

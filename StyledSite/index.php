@@ -30,7 +30,7 @@
         <div id="main">
 			<div class="recipeHeader">
 				<h1 class="recipeTitle">Featured Recipe: Pork Chops with Mushroom Sauce</h1>
-				<img src="images/porkchops.jpg" alt="pork chops with mushroom sauce" class="midimg">
+				<img src="images/chopsmushsauce.png" alt="pork chops with mushroom sauce" class="midimg">
 			</div>
 			<div class="recipeContent">
             <p>Deliciously easy pork chops with creamy garlic herb mushroom sauce is a super easy dinner recipe! Perfect for any night of the week.</p>

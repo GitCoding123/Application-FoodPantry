@@ -100,7 +100,7 @@ session_start();
 	}
 
 	/* Change styles for cancel button and signup button on extra small screens */
-	@media screen and (max-width: 300px) {
+	@media screen and (max-width: 600px) {
   	.cancelbtn, .signupbtn {
     width: 75%;
   	}

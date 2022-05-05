@@ -30,12 +30,15 @@
             <h1>Find a Recipe</h1>
             <hr>
             <div class="recipe">
-                <ul>
-                    <li><a href="ringredient.html">By Ingredients</a></li>
-                    <li><a href="rmacros.html">By Macros</a></li>
-                    <li><a href="rkeyword.html">By Keywords</a></li>
+                <ul id="findoptions">
+                    <li><a class="option" href="ringredient.php">By Ingredients</a></li>
+                    <li><a class="option" href="rmacro.php">By Calories</a></li>
+                    <li><a class="option" href="rkeyword.php">By Keywords</a></li>
                     <!--Need logic for this, will redirect to generic recipe view and load a random recipe-->
-                    <li><a href="recipe.php">Random Recipe</a> </li> 
+					<?php $randomID = rand(1, 6);
+					echo '<li><a class="option" href="recipe.php?recipe=' . $randomID . '">Random Recipe</a> </li>';
+					?>
+                    
                 </ul>
             </div>
         </div>

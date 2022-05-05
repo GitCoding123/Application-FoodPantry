@@ -30,6 +30,10 @@
             <h1>My Pantry</h1>
             <hr>
             <div class="pantry">
+			
+				<select>
+					<option>
+				</select>
                 <ul>
                     <li>AP Flour</li>
                     <li>Seasoned Salt</li>
@@ -40,9 +44,9 @@
                     <li>Soy Sauce</li>
                 </ul>
                 <br>
-                <div class="search">
+                <div class="isearch">
                     <!--create search action, preferably live search-->
-                    <span>+ </span><input type="text" placeholder="Add Ingredient" name="isearch" id="isearch">
+                    Add: <input type="text" placeholder="Add Ingredient" name="isearch" id="isearch">
                 </div>
             </div>
         </div>
