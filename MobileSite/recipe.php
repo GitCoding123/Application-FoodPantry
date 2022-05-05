@@ -50,33 +50,28 @@
                 }
             ?>
             <br>
-            <div class="ingredients">
-                <ul>    
-                    <?php
-                        $sql = "SELECT * FROM ingredient_list WHERE recipe = '$recipe';";
-                        $result = mysqli_query($con,$sql);
-						echo '<div class="recipeContent">';
-						echo '<h3>Ingredients:</h3>';
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo '<li>'.$row['quantity'].' '.$row['measurement'].' '.$row['ingredient'].'</li>';
-                        }
-						echo '</div>';
-                    ?>
-                </ul>
-            </div>
-            <div class="steps">
-                <ol type="1">
-                    <?php
-                        $sql = "SELECT * FROM recipe_steps WHERE recipe_ID = '$recipe';";
-                        $result = mysqli_query($con,$sql);
-						echo '<div class="recipeContent">';
-						echo '<h3>Steps:</h3>';
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo '<li>'.$row['step_description'].'</li>';
-                        }
-						echo '</div>';
-                    ?>
-                </ol>
+            <div class="ingredientsAndSteps">
+				<?php
+					$sql = "SELECT * FROM ingredient_list WHERE recipe = '$recipe';";
+					$result = mysqli_query($con,$sql);
+					echo '<div class="recipeContent">';
+					echo '<h3>Ingredients:</h3>';
+					echo '<ul>';
+					while ($row = mysqli_fetch_assoc($result)) {
+						echo '<li>'.$row['quantity'].' '.$row['measurement'].' '.$row['ingredient'].'</li>';
+					}
+					echo '</ul>';
+					
+					$sql = "SELECT * FROM recipe_steps WHERE recipe_ID = '$recipe';";
+					$result = mysqli_query($con,$sql);
+					echo '<h3>Steps:</h3>';
+					echo '<ol type="1">';
+					while ($row = mysqli_fetch_assoc($result)) {
+						echo '<li>'.$row['step_description'].'</li>';
+					}
+					echo '</ol>';
+					echo '</div>';
+				?>
             </div>
 
         </div><!--end main-->

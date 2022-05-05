@@ -33,7 +33,7 @@
 			<br>
 			
 			<form method="POST">
-				<input type="search" name="search" value="">
+				<input type="search" name="search" value="" placeholder="Huli Huli Chicken">
 				<input type="submit" name="submit" value="Search">
 			</form>
 			

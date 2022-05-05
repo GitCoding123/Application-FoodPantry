@@ -49,7 +49,7 @@
 			</div>
 			<div class="recipeHeader">
 				<h1 class="recipeTitle">Last Week's Recipe: Huli-Huli Chicken</h1>
-				<img src="images/hulihulichicken.png" alt="huli-huli chicken" class="midimg">
+				<img src="images/huliweb.png" alt="huli-huli chicken" class="midimg">
 			</div>
 			<div class="recipeContent">
             <p>Fun fact! Huli-Huli comes from the Hawaiian word for "turn" and the name of the recipe refers to how the chicken was flipped multiple times during grilling.</p>
