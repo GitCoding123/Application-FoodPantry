@@ -212,8 +212,31 @@ nav {
 }
 
 /* FindRecipe Styling */
+
+.recipe {
+	text-align: center;
+}
+
 #findoptions {
+	font-size: 1em;
 	list-style-type: none;
+}
+
+#findoptions ul {
+    padding-left: -1em;
+}
+
+#findoptions li {
+	background-color: white;
+	border: double 5px var(--border);
+	border-radius: 2em;
+	margin-bottom: 1em;
+	padding: 1em;
+	transition: 0.3s;
+}
+
+#findoptions li:hover {
+	background-color: var(--green);
 }
 
 .option {
@@ -221,7 +244,7 @@ nav {
 }
 
 .option:hover {
-	color: var(--green);
+	color: white;
 }
 
 

@@ -31,12 +31,12 @@
             <hr>
             <div class="recipe">
                 <ul id="findoptions">
-                    <li><a class="option" href="ringredient.php">By Ingredients</a></li>
-                    <li><a class="option" href="rmacro.php">By Calories</a></li>
-                    <li><a class="option" href="rkeyword.php">By Keywords</a></li>
+                    <a class="option" href="ringredient.php"><li>By Ingredients</li></a>
+                    <a class="option" href="rmacro.php"><li>By Calories</li></a>
+                    <a class="option" href="rkeyword.php"><li>By Keywords</li></a>
                     <!--Need logic for this, will redirect to generic recipe view and load a random recipe-->
 					<?php $randomID = rand(1, 6);
-					echo '<li><a class="option" href="recipe.php?recipe=' . $randomID . '">Random Recipe</a> </li>';
+					echo '<a class="option" href="recipe.php?recipe=' . $randomID . '"><li>Random Recipe </li></a>';
 					?>
                     
                 </ul>
